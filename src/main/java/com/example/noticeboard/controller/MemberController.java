@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequestMapping("/member")
 public class MemberController {
 
     private final MemberService memberService;
@@ -17,19 +18,19 @@ public class MemberController {
         this.memberService = memberService;
     }
 
-    @PostMapping("/members")
-    public Mono<Member> createMember(@RequestBody Member member) {
-        return memberService.createMember(member);
-    }
-
-    @GetMapping("/member/{memberId}")
+    @GetMapping("/get/{memberId}")
     public Mono<Member> getOneMember(@PathVariable Long memberId) {
         return memberService.getOneMember(memberId);
     }
 
-    @GetMapping("/members")
+    @GetMapping("/get/members")
     public Flux<Member> getAllMembers() {
         return memberService.getAllMember();
+    }
+
+    @PostMapping("/post/save")
+    public Mono<Member> createMember(@RequestBody Member member) {
+        return memberService.createMember(member);
     }
 
 }
