@@ -27,7 +27,7 @@ public class ReplyController {
         return replyService.updateReply(updateReply);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{replyId}")
     public Mono<Void> deleteReply(@PathVariable Long replyId) {
         return replyService.deleteReply(replyId);
     }
