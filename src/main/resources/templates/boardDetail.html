@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"> <!-- 문자 인코딩을 UTF-8로 설정 -->
+    <title>Board Detail</title>
+</head>
+<body>
+<h1>Board Details</h1>
+<div th:if="${board}">
+    <h2 th:text="${board.title}">Board Title</h2>
+    <p th:text="${board.content}">Board Content</p>
+</div>
+<div th:if="${board == null}">
+    <p>Board not found.</p>
+</div>
+</body>
+</html>

@@ -3,10 +3,12 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Board;
 import com.example.noticeboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-@RestController
+@Controller
 @RequestMapping("/board")
 public class BoardController {
 
@@ -18,13 +20,15 @@ public class BoardController {
     }
 
     @PostMapping("/post/save")
-    public Mono<Board> createBoard(@RequestBody Board board) {
-        return boardService.createBoard(board);
+    public Mono<String> createBoard(@RequestBody Board board, Model model) {
+        model.addAttribute("board", boardService.createBoard(board));
+        return Mono.just("boardDetail");
     }
 
     @GetMapping("/get/{boardId}")
-    public Mono<Board> getOneByBoardId(@PathVariable Long boardId) {
-        return boardService.getOneByBoardId(boardId);
+    public Mono<String> getOneByBoardId(@PathVariable Long boardId, Model model) {
+        model.addAttribute("board", boardService.getOneByBoardId(boardId));
+        return Mono.just("boardDetail");
     }
 
 }

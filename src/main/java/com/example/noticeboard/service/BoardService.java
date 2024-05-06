@@ -12,15 +12,12 @@ import reactor.core.publisher.Mono;
 public class BoardService {
 
     private final BoardRepository boardRepository;
-    private final PhotoRepository photoRepository;
     private final ReplyRepository replyRepository;
 
     @Autowired
     public BoardService(BoardRepository boardRepository,
-                        PhotoRepository photoRepository,
                         ReplyRepository replyRepository) {
         this.boardRepository = boardRepository;
-        this.photoRepository = photoRepository;
         this.replyRepository = replyRepository;
     }
 
@@ -32,12 +29,6 @@ public class BoardService {
     public Mono<Board> getOneByBoardId(Long boardId) {
         return boardRepository
                 .findById(boardId)
-                .flatMap(board -> photoRepository.findByBoardId(board.getBoardId())
-                        .collectList()
-                        .map(photos -> {
-                            board.setPhotoList(photos);
-                            return board;
-                        }))
                 .flatMap(board -> replyRepository.findByBoardId(board.getBoardId())
                         .collectList()
                         .map(replies -> {
