@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>게시판</title>
+</head>
+<body>
+<div class="board-container">
+  <h1>게시판</h1>
+  <div th:each="board : ${boards}">
+    <div class="board-title">
+      <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

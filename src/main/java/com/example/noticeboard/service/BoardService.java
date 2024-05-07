@@ -6,6 +6,7 @@ import com.example.noticeboard.repository.PhotoRepository;
 import com.example.noticeboard.repository.ReplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -24,6 +25,17 @@ public class BoardService {
 
     public Mono<Board> createBoard(Board board) {
         return boardRepository.save(board);
+    }
+
+    public Flux<Board> getAllBoard() {
+        return boardRepository
+                .findAll()
+                .flatMap(board -> replyRepository.findByBoardId(board.getBoardId())
+                            .collectList()
+                            .map(replies -> {
+                                board.setReplyList(replies);
+                                return board;
+                            }));
     }
 
     public Mono<Board> getOneByBoardId(Long boardId) {

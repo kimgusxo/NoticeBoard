@@ -26,12 +26,14 @@ public class ReplyController {
     }
 
     @PutMapping("/put/update")
-    public Mono<Reply> updateReply(@RequestBody Reply updateReply) {
-        return replyService.updateReply(updateReply);
+    public Mono<String> updateReply(@RequestBody Reply updateReply, Model model) {
+        model.addAttribute("reply", replyService.updateReply(updateReply));
+        return Mono.just("replyDetail");
     }
 
     @DeleteMapping("/delete/{replyId}")
-    public Mono<Void> deleteReply(@PathVariable Long replyId) {
-        return replyService.deleteReply(replyId);
+    public Mono<String> deleteReply(@PathVariable Long replyId) {
+        replyService.deleteReply(replyId);
+        return Mono.just("deleteNotification");
     }
 }

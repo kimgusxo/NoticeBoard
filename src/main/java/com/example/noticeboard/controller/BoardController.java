@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -18,6 +19,15 @@ public class BoardController {
     public BoardController(BoardService boardService) {
         this.boardService = boardService;
     }
+
+    @GetMapping("")
+    public Mono<String> showBoard(Model model) {
+        return boardService.getAllBoard()
+                .collectList()
+                .doOnNext(boards -> model.addAttribute("boards", boards))
+                .thenReturn("boardPage");
+    }
+
 
     @PostMapping("/post/save")
     public Mono<String> createBoard(@RequestBody Board board, Model model) {
