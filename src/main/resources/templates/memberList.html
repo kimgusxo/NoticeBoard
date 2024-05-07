@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Members</title>
+</head>
+<body>
+<h1>Member List</h1>
+<div>
+  <!-- 멤버 데이터를 반복하여 텍스트를 생성합니다 -->
+  <p th:each="member, stat : ${members}" th:text="'Index: ' + ${stat.index + 1} + ', ID: ' + ${member.id}">
+    Index: 1, ID: abc
+  </p>
+</div>
+</body>
+</html>

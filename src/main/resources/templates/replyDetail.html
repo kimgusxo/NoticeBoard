@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Reply</title>
+</head>
+<body>
+<div th:fragment="replyDetails(replyList)">
+    <div th:each="reply : ${replyList}">
+        <p th:text="${reply.replyId}">Reply ID</p>
+        <p th:text="${reply.writer}">Writer</p>
+        <p th:text="${reply.content}">Content</p>
+        <p th:text="${reply.registrationDate}">RegDate</p>
+        <p th:if="${reply.updateDate != null}" th:text="${reply.updateDate}">UpdateDate</p>
+    </div>
+</div>
+</body>
+</html>

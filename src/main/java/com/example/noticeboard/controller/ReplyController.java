@@ -3,10 +3,12 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Reply;
 import com.example.noticeboard.service.ReplyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
-@RestController
+@Controller
 @RequestMapping("/reply")
 public class ReplyController {
 
@@ -18,8 +20,9 @@ public class ReplyController {
     }
 
     @PostMapping("/post/save")
-    public Mono<Reply> createReply(@RequestBody Reply reply) {
-        return replyService.createReply(reply);
+    public Mono<String> createReply(@RequestBody Reply reply, Model model) {
+        model.addAttribute("reply", replyService.createReply(reply));
+        return Mono.just("replyDetail");
     }
 
     @PutMapping("/put/update")
