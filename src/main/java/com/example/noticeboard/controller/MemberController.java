@@ -33,10 +33,4 @@ public class MemberController {
                 .thenReturn("memberList");
     }
 
-    @PostMapping("/post/save")
-    public Mono<String> createMember(@RequestBody Member member, Model model) {
-        model.addAttribute("member", memberService.createMember(member));
-        return Mono.just("memberDetail");
-    }
-
 }

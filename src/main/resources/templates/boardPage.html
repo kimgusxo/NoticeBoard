@@ -3,15 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
+    <style>
+        .board-container {
+            width: 100%;
+            position: relative;
+        }
+        .board-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .board-header .auth-links {
+            margin-left: auto;
+        }
+        .board-header .auth-links a {
+            text-decoration: none;
+        }
+        .write-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: black;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 <div class="board-container">
-  <h1>게시판</h1>
-  <div th:each="board : ${boards}">
-    <div class="board-title">
-      <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
+    <h1>게시판</h1>
+    <div class="board-header">
+        <div class="auth-links">
+            <a href="/login">로그인</a> / <a href="/signup">회원가입</a>
+        </div>
     </div>
-  </div>
+    <div th:each="board : ${boards}">
+        <div class="board-title">
+            <a th:href="@{/board/{id}(id=${board.id})}" th:text="${board.title}">게시글 제목</a>
+        </div>
+    </div>
 </div>
+<a href="/write" class="write-btn">글쓰기</a>
 </body>
 </html>

@@ -37,9 +37,4 @@ public class MemberService {
     public Flux<Member> getAllMember() {
         return memberRepository.findAll();
     }
-
-    public Mono<Member> createMember(Member member) {
-        return memberRepository.save(member);
-    }
-
 }

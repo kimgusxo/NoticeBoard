@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 작성</title>
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+    .container {
+      width: 60%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .form-container {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .form-container label {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .form-container input[type="text"],
+    .form-container textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .submit-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      background-color: black;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>게시글 작성</h1>
+  <div class="form-container">
+    <form action="/submit-post" method="post">
+      <label for="title">게시글 제목</label>
+      <input type="text" id="title" name="title" required>
+
+      <label for="content">게시글 본문</label>
+      <textarea id="content" name="content" rows="10" required></textarea>
+    </form>
+  </div>
+</div>
+<a href="#" class="submit-btn" onclick="document.querySelector('form').submit();">글작성 완료</a>
+</body>
+</html>
