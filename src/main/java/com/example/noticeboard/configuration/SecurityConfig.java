@@ -2,46 +2,43 @@ package com.example.noticeboard.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 
 @Configuration
-@EnableWebSecurity
+@EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests(request ->
-                request.requestMatchers("/", "login", "signUp")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) throws Exception {
+        http.authorizeExchange(exchanges ->
+                exchanges.pathMatchers("/board", "/login", "/signUp").permitAll()
+                        .anyExchange().authenticated()
         ).formLogin(formLogin ->
                 formLogin.loginPage("/login")
-                        .defaultSuccessUrl("/boardPage", true)
-                        .permitAll()
+                        .authenticationSuccessHandler((webFilterExchange, authentication) ->
+                                webFilterExchange.getExchange().getResponse().setComplete())
         ).logout(logout ->
                 logout.logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
-                        .permitAll()
+                        .logoutSuccessHandler((webFilterExchange, authentication) ->
+                                webFilterExchange.getExchange().getResponse().setComplete())
         );
 
         return http.build();
     }
 
-    @Bean
-    public UserDetailsService userDetailsService() {
+    public ReactiveUserDetailsService userDetailsService() {
         UserDetails user = User.withDefaultPasswordEncoder()
                 .username("user")
                 .password("password")
                 .roles("USER")
                 .build();
 
-        return new InMemoryUserDetailsManager(user);
+        return new MapReactiveUserDetailsService(user);
     }
 }
