@@ -19,7 +19,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @GetMapping("")
+    @GetMapping("/showBoard")
     public Mono<String> showBoard(Model model) {
         return boardService.getAllBoard()
                 .collectList()
