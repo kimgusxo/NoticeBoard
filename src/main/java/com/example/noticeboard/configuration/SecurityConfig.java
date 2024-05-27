@@ -27,7 +27,7 @@ public class SecurityConfig {
                 )
                 .formLogin(formLogin ->
                         formLogin.loginPage("/auth/showLogin")
-                                .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler("/board/showBoard"))
+                                .authenticationSuccessHandler(new RedirectServerAuthenticationSuccessHandler())
                 )
                 .logout(logout ->
                         logout.logoutUrl("/auth/logout")

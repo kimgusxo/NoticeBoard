@@ -37,7 +37,12 @@
     <h1>게시판</h1>
     <div class="board-header">
         <div class="auth-links">
-            <a href="/auth/showLogin">로그인</a> / <a href="/auth/showSignUp">회원가입</a>
+            <div th:if="${loggedIn}">
+                <a href="/auth/logout">로그아웃</a> / <a href="/member/showMember">내 정보 보기</a>
+            </div>
+            <div th:if="${!loggedIn}">
+                <a href="/auth/showLogin">로그인</a> / <a href="/auth/showSignUp">회원가입</a>
+            </div>
         </div>
     </div>
     <div th:each="board : ${boards}">
@@ -46,6 +51,6 @@
         </div>
     </div>
 </div>
-<a href="/write" class="write-btn">글쓰기</a>
+<a href="/board/showCreateBoard" class="write-btn">글쓰기</a>
 </body>
 </html>

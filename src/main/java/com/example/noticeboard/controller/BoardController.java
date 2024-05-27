@@ -3,6 +3,8 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Board;
 import com.example.noticeboard.service.BoardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +23,26 @@ public class BoardController {
 
     @GetMapping("/showBoard")
     public Mono<String> showBoard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
+            model.addAttribute("loggedIn", true);
+        } else {
+            model.addAttribute("loggedIn", false);
+        }
+
         return boardService.getAllBoard()
                 .collectList()
                 .doOnNext(boards -> model.addAttribute("boards", boards))
                 .thenReturn("boardPage");
     }
 
+    @GetMapping("/showCreateBoard")
+    public Mono<String> showCreateBoard() {
+        return Mono.just("createBoard");
+    }
 
     @PostMapping("/post/save")
-    public Mono<String> createBoard(@RequestBody Board board, Model model) {
+    public Mono<String> createBoard(@ModelAttribute Board board, Model model) {
         model.addAttribute("board", boardService.createBoard(board));
         return Mono.just("boardDetail");
     }

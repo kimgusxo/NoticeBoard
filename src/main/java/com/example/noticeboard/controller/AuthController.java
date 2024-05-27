@@ -52,6 +52,7 @@ public class AuthController {
                     return exchange.getSession()
                             .doOnNext(session -> {
                                 session.getAttributes().put("SPRING_SECURITY_CONTEXT", context);
+                                session.getAttributes().put("ID", userDetails.getUsername());
                             })
                             .then(Mono.defer(() -> {
                                 exchange.getResponse().setStatusCode(HttpStatus.FOUND);
@@ -68,8 +69,8 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public Mono<Void> logout(WebSession session) {
-        return session.invalidate();
+    public Mono<String> logout(WebSession session) {
+        return session.invalidate().then(Mono.just("redirect:/board/showBoard"));
     }
 
 }

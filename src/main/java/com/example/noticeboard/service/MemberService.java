@@ -23,9 +23,9 @@ public class MemberService {
         this.boardRepository = boardRepository;
     }
 
-    public Mono<Member> getOneMember(Long memberId) {
+    public Mono<Member> getOneMember(String id) {
         return memberRepository
-                .findById(memberId)
+                .findById(id)
                 .flatMap(member -> boardRepository.findByMemberId(member.getMemberId())
                         .collectList()
                         .map(boards -> {

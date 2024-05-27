@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>게시글 작성</title>
@@ -36,16 +36,17 @@
       border: 1px solid #ccc;
       border-radius: 5px;
     }
-    .submit-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
+    .write-button {
       padding: 10px 20px;
       background-color: black;
       color: white;
       text-decoration: none;
       border-radius: 5px;
       text-align: center;
+      cursor: pointer;
+    }
+    .write-button:hover {
+      background-color: #333;
     }
   </style>
 </head>
@@ -53,15 +54,15 @@
 <div class="container">
   <h1>게시글 작성</h1>
   <div class="form-container">
-    <form action="/submit-post" method="post">
+    <form action="/board/post/save" method="POST">
       <label for="title">게시글 제목</label>
       <input type="text" id="title" name="title" required>
 
       <label for="content">게시글 본문</label>
       <textarea id="content" name="content" rows="10" required></textarea>
+      <button type="submit" class="write-button">글 작성완료</button>
     </form>
   </div>
 </div>
-<a href="#" class="submit-btn" onclick="document.querySelector('form').submit();">글작성 완료</a>
 </body>
 </html>

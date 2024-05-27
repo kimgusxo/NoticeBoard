@@ -6,6 +6,5 @@ import reactor.core.publisher.Mono;
 
 public interface MemberRepository extends ReactiveCrudRepository<Member, Long> {
     Mono<Member> findById(String id);
-    Mono<Member> findByIdAndPassword(String id, String password);
 
 }
