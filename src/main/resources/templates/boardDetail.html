@@ -3,17 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Board</title>
+    <style>
+        .container {
+            margin: 20px;
+        }
+        .title {
+            border-bottom: 1px solid #000;
+            display: flex;
+            align-items: center;
+        }
+        .title h1 {
+            margin-right: auto;
+        }
+        .content, .comments {
+            border: 1px solid #000;
+            margin-top: 20px;
+            padding: 10px;
+        }
+        .comments textarea {
+            width: 100%;
+            margin-top: 10px;
+        }
+    </style>
 </head>
 <body>
-<h1>Board Details</h1>
-<div th:if="${board}">
-    <h1 th:text="${board.boardId}"> Board ID </h1>
-    <h2 th:text="${board.title}">Board Title</h2>
-    <p th:text="${board.content}">Board Content</p>
-    <div th:replace="~{replyDetail :: replyDetails(${board.replyList})}"></div>
-</div>
-<div th:if="${board == null}">
-    <p>Board not found.</p>
+<div class="container">
+    <a th:action="@{/reply/post/save}" method="post">x</a>
+        <div class="title">
+            <h1>제목: <span th:text="${board.title}"></span></h1>
+            <h3>작성자: <span th:text="${board.writer}"></span></h3>
+            <h3>작성일: <span th:text="${board.registrationDate}"></span></h3> <!-- Display board registration date -->
+    </div>
+    <div class="content">
+        <div th:text="${board.content}"></div>
+    </div>
+    <div class="comments">
+        <h2>댓글</h2>
+        <div th:each="reply : ${board.replyList}">
+            <p>작성자: <span th:text="${reply.writer}"></span>, 작성일: <span th:text="${reply.registrationDate}"></span></p>
+            <p th:text="${reply.content}"></p>
+        </div>
+        <!-- 댓글 입력 폼 -->
+        <form th:action="@{/reply/post/save}" method="post">
+            <textarea name="content" rows="4" placeholder="댓글을 입력하세요"></textarea>
+            <button type="submit">댓글 달기</button>
+        </form>
+    </div>
 </div>
 </body>
 </html>
