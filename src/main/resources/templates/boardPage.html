@@ -30,6 +30,21 @@
             border-radius: 5px;
             text-align: center;
         }
+        .board-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid black;
+            margin-bottom: 10px;
+        }
+        .board-title a {
+            text-decoration: none;
+            color: black;
+        }
+        .board-title p {
+            margin: 0;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +63,7 @@
     <div th:each="board : ${boards}">
         <div class="board-title">
             <a th:href="@{/board/{id}(id=${board.boardId})}" th:text="${board.title}">게시글 제목</a>
+            <p th:text="${board.writer}">작성자</p>
         </div>
     </div>
 </div>

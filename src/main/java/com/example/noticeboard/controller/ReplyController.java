@@ -20,15 +20,15 @@ public class ReplyController {
     }
 
     @PostMapping("/post/save")
-    public Mono<String> createReply(@RequestBody Reply reply, Model model) {
-        model.addAttribute("reply", replyService.createReply(reply));
-        return Mono.just("replyDetail");
+    public Mono<String> createReply(@ModelAttribute Reply savedReply) {
+        return replyService.createReply(savedReply)
+                .map(reply -> "redirect:/board/get/" + reply.getBoardId());
     }
 
     @PutMapping("/put/update")
-    public Mono<String> updateReply(@RequestBody Reply updateReply, Model model) {
+    public Mono<String> updateReply(@ModelAttribute Reply updateReply, Model model) {
         model.addAttribute("reply", replyService.updateReply(updateReply));
-        return Mono.just("replyDetail");
+        return Mono.just("boardDetail");
     }
 
     @DeleteMapping("/delete/{replyId}")
