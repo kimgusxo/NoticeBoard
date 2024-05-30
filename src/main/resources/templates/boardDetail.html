@@ -37,7 +37,7 @@
     <div class="title">
         <h1>제목: <span th:text="${board.title}"></span></h1>
         <h3>작성자: <span th:text="${board.writer}"></span></h3>
-        <h3>작성일: <span th:text="${board.registrationDate}"></span></h3> <!-- Display board registration date -->
+        <h3>작성일: <span th:text="${board.registrationDate}"></span></h3>
     </div>
     <div class="content">
         <div th:text="${board.content}"></div>
@@ -51,6 +51,8 @@
         <!-- 댓글 입력 폼 -->
         <form th:action="@{/reply/post/save}" method="post">
             <textarea name="content" rows="4" placeholder="댓글을 입력하세요"></textarea>
+            <input type="hidden" name="boardId" th:value="${board.boardId}"/>
+            <input type="hidden" name="writer" th:value="${writer}"/>
             <button type="submit">댓글 달기</button>
         </form>
     </div>

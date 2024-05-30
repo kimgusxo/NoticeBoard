@@ -60,6 +60,9 @@
 
       <label for="content">게시글 본문</label>
       <textarea id="content" name="content" rows="10" required></textarea>
+
+      <input type="hidden" id="writer" name="writer" th:value="${writer}">
+
       <button type="submit" class="write-button">글 작성완료</button>
     </form>
   </div>

@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -37,8 +38,13 @@ public class BoardController {
     }
 
     @GetMapping("/showCreateBoard")
-    public Mono<String> showCreateBoard() {
-        return Mono.just("createBoard");
+    public Mono<String> showCreateBoard(Model model, ServerWebExchange exchange) {
+        return exchange.getSession()
+                .flatMap(webSession -> {
+                    String writer = webSession.getAttribute("ID");
+                    model.addAttribute("writer", writer);
+                    return Mono.just("createBoard");
+                });
     }
 
     @PostMapping("/post/save")
@@ -48,9 +54,15 @@ public class BoardController {
     }
 
     @GetMapping("/get/{boardId}")
-    public Mono<String> getOneByBoardId(@PathVariable Long boardId, Model model) {
-        model.addAttribute("board", boardService.getOneByBoardId(boardId));
-        return Mono.just("boardDetail");
+    public Mono<String> getOneByBoardId(@PathVariable Long boardId, Model model, ServerWebExchange exchange) {
+        return exchange.getSession()
+                .flatMap(webSession -> {
+                    String writer = (String) webSession.getAttribute("ID");
+                    model.addAttribute("writer", writer);
+                    return boardService.getOneByBoardId(boardId)
+                            .doOnNext(board -> model.addAttribute("board", board))
+                            .thenReturn("boardDetail");
+                });
     }
 
 }
