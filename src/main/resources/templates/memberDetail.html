@@ -5,7 +5,7 @@
     <title>Member</title>
 </head>
 <body>
-<h1> 내 정보 </h1>
+<h1>내 정보</h1>
 <div th:if="${member}">
     <h2 th:text="${member.id}">Member ID</h2>
     <div th:each="board : ${member.boardList}">
@@ -13,7 +13,7 @@
     </div>
 </div>
 <div th:if="${member == null}">
-    <p>Member not found</p>
+    <p>회원 정보를 찾을 수 없습니다.</p>
 </div>
 </body>
 </html>

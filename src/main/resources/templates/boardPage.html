@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>게시판</title>
@@ -53,10 +53,10 @@
     <div class="board-header">
         <div class="auth-links">
             <div th:if="${loggedIn}">
-                <a href="/auth/logout">로그아웃</a> / <a href="/member/showMember">내 정보 보기</a>
+                <a th:href="@{/auth/logout}">로그아웃</a> / <a th:href="@{/member/showMember}">내 정보 보기</a>
             </div>
-            <div th:if="${!loggedIn}">
-                <a href="/auth/showLogin">로그인</a> / <a href="/auth/showSignUp">회원가입</a>
+            <div th:if="${not loggedIn}">
+                <a th:href="@{/auth/showLogin}">로그인</a> / <a th:href="@{/auth/showSignUp}">회원가입</a>
             </div>
         </div>
     </div>
@@ -67,6 +67,6 @@
         </div>
     </div>
 </div>
-<a href="/board/showCreateBoard" class="write-btn">글쓰기</a>
+<a th:href="@{/board/showCreateBoard}" class="write-btn">글쓰기</a>
 </body>
 </html>
