@@ -44,21 +44,25 @@ public class AuthController {
     public Mono<Void> login(@ModelAttribute Member member, ServerWebExchange exchange) {
         return customUserDetailService.findByUsername(member.getId())
                 .flatMap(userDetails -> {
-                    Authentication authentication = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities());
-                    SecurityContext context = SecurityContextHolder.createEmptyContext();
-                    context.setAuthentication(authentication);
-                    SecurityContextHolder.setContext(context);
-                    return exchange.getSession()
-                            .doOnNext(session -> {
-                                session.getAttributes().put("SPRING_SECURITY_CONTEXT", context);
-                                session.getAttributes().put("ID", userDetails.getUsername());
-                            })
-                            .then(Mono.defer(() -> {
-                                exchange.getResponse().setStatusCode(HttpStatus.FOUND);
-                                exchange.getResponse().getHeaders().setLocation(URI.create("/board/showBoard"));
-                                return exchange.getResponse().setComplete();
-                            }));
+                    if(!member.getPassword().equals(userDetails.getPassword())) {
+                        return Mono.error(new RuntimeException("비밀번호가 잘못되었습니다."));
+                    } else {
+                        Authentication authentication = new UsernamePasswordAuthenticationToken(
+                                userDetails, null, userDetails.getAuthorities());
+                        SecurityContext context = SecurityContextHolder.createEmptyContext();
+                        context.setAuthentication(authentication);
+                        SecurityContextHolder.setContext(context);
+                        return exchange.getSession()
+                                .doOnNext(session -> {
+                                    session.getAttributes().put("SPRING_SECURITY_CONTEXT", context);
+                                    session.getAttributes().put("ID", userDetails.getUsername());
+                                })
+                                .then(Mono.defer(() -> {
+                                    exchange.getResponse().setStatusCode(HttpStatus.FOUND);
+                                    exchange.getResponse().getHeaders().setLocation(URI.create("/board/showBoard"));
+                                    return exchange.getResponse().setComplete();
+                                }));
+                    }
                 });
     }
 

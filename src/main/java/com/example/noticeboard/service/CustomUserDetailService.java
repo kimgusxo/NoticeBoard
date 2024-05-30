@@ -21,10 +21,17 @@ public class CustomUserDetailService implements ReactiveUserDetailsService {
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
-        return memberRepository.findById(username)
-                .map(member -> User.withUsername(member.getId())
-                                .password(member.getPassword())
-                                .roles("USER")
-                                .build());
+        return memberRepository.existsById(username)
+                .flatMap(exists -> {
+                    if(!exists) {
+                        return Mono.error(new RuntimeException("아이디가 존재하지 않습니다."));
+                    } else {
+                        return memberRepository.findById(username)
+                                .map(member -> User.withUsername(member.getId())
+                                        .password(member.getPassword())
+                                        .roles("USER")
+                                        .build());
+                    }
+                });
     }
 }
