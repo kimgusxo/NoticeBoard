@@ -41,6 +41,7 @@
         .board-title a {
             text-decoration: none;
             color: black;
+            font-weight: bold;
         }
         .board-title p {
             margin: 0;
@@ -63,7 +64,7 @@
     <div th:each="board : ${boards}">
         <div class="board-title">
             <a th:href="@{/board/get/{id}(id=${board.boardId})}" th:text="${board.title}">게시글 제목</a>
-            <p th:text="${board.writer}">작성자</p>
+            <p> 작성자: <span th:text="${board.writer}"></span></p>
         </div>
     </div>
 </div>

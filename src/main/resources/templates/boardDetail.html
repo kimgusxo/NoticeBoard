@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Board</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .container {
             margin: 20px;
+        }
+        .exit {
+            font-size: 35px ; /* 크기 키우기 */
+            font-weight: bold; /* 굵게 만들기 */
+            text-decoration: none; /* 밑줄 제거 */
+            color: inherit; /* 기본 색상 유지 */
         }
         .title {
             border-bottom: 1px solid #000;
@@ -33,7 +41,9 @@
 </head>
 <body>
 <div class="container">
-    <a th:href="@{/board/showBoard}">x</a>
+    <a class="exit" th:href="@{/board/showBoard}">
+        <i class="fas fa-times"></i>
+    </a>
     <div class="title">
         <h1>제목: <span th:text="${board.title}"></span></h1>
         <h3>작성자: <span th:text="${board.writer}"></span></h3>
@@ -45,7 +55,7 @@
     <div class="comments">
         <h2>댓글</h2>
         <div th:each="reply : ${board.replyList}" class="comment">
-            <p>작성자: <span th:text="${reply.writer}"></span>, 작성일: <span th:text="${reply.registrationDate}"></span></p>
+            <p>작성자: <span th:text="${reply.writer}"></span> 작성일: <span th:text="${reply.registrationDate}"></span></p>
             <p th:text="${reply.content}">댓글 내용</p>
         </div>
         <!-- 댓글 입력 폼 -->

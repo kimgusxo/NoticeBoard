@@ -3,6 +3,7 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Member;
 import com.example.noticeboard.service.AuthService;
 import com.example.noticeboard.service.CustomUserDetailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.net.URI;
 
+@Slf4j
 @Controller
 @RequestMapping("/auth")
 public class AuthController {

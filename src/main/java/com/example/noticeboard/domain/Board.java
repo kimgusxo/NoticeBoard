@@ -22,8 +22,10 @@ public class Board {
     private String writer;
     private String title;
     private String content;
+
     @CreatedDate
     private LocalDate registrationDate;
+
     @LastModifiedDate
     private LocalDate updateDate;
 
@@ -31,6 +33,7 @@ public class Board {
 
     @Transient
     private List<Photo> photoList;
+
     @Transient
     private List<Reply> replyList;
 
