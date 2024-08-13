@@ -46,8 +46,10 @@
     </a>
     <div class="title">
         <h1>제목: <span th:text="${board.title}"></span></h1>
-        <h3>작성자: <span th:text="${board.writer}"></span></h3>
-        <h3>작성일: <span th:text="${board.registrationDate}"></span></h3>
+        <div>
+            <h3>작성자: <span th:text="${board.writer}"></span></h3>
+            <h3>작성일: <span th:text="${board.registrationDate}"></span></h3>
+        </div>
     </div>
     <div class="content">
         <div th:text="${board.content}"></div>
@@ -55,7 +57,7 @@
     <div class="comments">
         <h2>댓글</h2>
         <div th:each="reply : ${board.replyList}" class="comment">
-            <p>작성자: <span th:text="${reply.writer}"></span> 작성일: <span th:text="${reply.registrationDate}"></span></p>
+            <p>작성자: <span th:text="${reply.writer}"></span></p><p>작성일: <span th:text="${reply.registrationDate}"></span>
             <p th:text="${reply.content}">댓글 내용</p>
         </div>
         <!-- 댓글 입력 폼 -->
