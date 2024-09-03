@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Validated
 @Controller
 @RequestMapping("/member")
 public class MemberController {
@@ -35,7 +34,7 @@ public class MemberController {
     }
 
     @GetMapping("/get/{id}")
-    public Mono<String> getOneMember(@PathVariable @Valid String id, Model model) {
+    public Mono<String> getOneMember(@PathVariable @Validated String id, Model model) {
         model.addAttribute("member", memberService.getOneMember(id));
         return Mono.just("memberDetail");
     }

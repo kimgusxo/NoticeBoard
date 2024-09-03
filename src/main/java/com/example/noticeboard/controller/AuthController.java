@@ -21,7 +21,6 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 
 @Slf4j
-@Validated
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -46,7 +45,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Mono<Void> login(@ModelAttribute @Valid Member member, ServerWebExchange exchange) {
+    public Mono<Void> login(@ModelAttribute @Validated Member member, ServerWebExchange exchange) {
         return customUserDetailService.findByUsername(member.getId())
                 .flatMap(userDetails -> {
                     if(!member.getPassword().equals(userDetails.getPassword())) {
@@ -66,14 +65,15 @@ public class AuthController {
                                     exchange.getResponse().setStatusCode(HttpStatus.FOUND);
                                     exchange.getResponse().getHeaders().setLocation(URI.create("/board/showBoard"));
                                     return exchange.getResponse().setComplete();
-                                }));
+                                })
+                                .onErrorResume(e -> Mono.error(e)));
                     }
                 });
     }
 
 
     @PostMapping("/signUp")
-    public Mono<String> signUp(@ModelAttribute @Valid Member member) {
+    public Mono<String> signUp(@ModelAttribute @Validated Member member) {
         return authService.signUp(member).then(Mono.just("redirect:/board/showBoard"));
     }
 

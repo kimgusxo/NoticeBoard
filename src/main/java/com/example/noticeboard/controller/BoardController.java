@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Validated
 @Controller
 @RequestMapping("/board")
 public class BoardController {
@@ -51,13 +50,13 @@ public class BoardController {
     }
 
     @PostMapping("/post/save")
-    public Mono<String> createBoard(@ModelAttribute @Valid Board board, Model model) {
+    public Mono<String> createBoard(@ModelAttribute @Validated Board board, Model model) {
         model.addAttribute("board", boardService.createBoard(board));
         return Mono.just("boardDetail");
     }
 
     @GetMapping("/get/{boardId}")
-    public Mono<String> getOneByBoardId(@PathVariable @Valid Long boardId, Model model, ServerWebExchange exchange) {
+    public Mono<String> getOneByBoardId(@PathVariable @Validated Long boardId, Model model, ServerWebExchange exchange) {
         return exchange.getSession()
                 .flatMap(webSession -> {
                     String writer = webSession.getAttribute("ID");

@@ -1,10 +1,12 @@
 package com.example.noticeboard.error;
 
 import org.springframework.ui.Model;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.support.WebExchangeBindException;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -15,9 +17,13 @@ public class GlobalExceptionHandler {
         return Mono.just("errorPage");
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Mono<String> handleBindException(MethodArgumentNotValidException ex, Model model) {
-        model.addAttribute("error", ex.getBindingResult().getAllErrors().get(0).getDefaultMessage());
+    @ExceptionHandler(WebExchangeBindException.class)
+    public Mono<String> handleBindException(WebExchangeBindException  ex, Model model) {
+        String errorMessages = ex.getBindingResult().getAllErrors().stream()
+                .map(error -> error.getDefaultMessage())
+                .collect(Collectors.joining(", "));
+
+        model.addAttribute("error", errorMessages);
         return Mono.just("errorPage");
     }
 }
