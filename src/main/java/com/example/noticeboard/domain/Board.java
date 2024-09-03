@@ -1,5 +1,7 @@
 package com.example.noticeboard.domain;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.CreatedDate;
@@ -19,13 +21,18 @@ public class Board {
     @Id
     private Long boardId;
 
+    @NotNull(message = "작성자가 Null이면 안됩니다.")
     private String writer;
+    @NotNull(message = "제목이 Null이면 안됩니다.")
     private String title;
+    @NotNull(message = "내용이 Null이면 안됩니다.")
     private String content;
 
+    @PastOrPresent
     @CreatedDate
     private LocalDate registrationDate;
 
+    @PastOrPresent
     @LastModifiedDate
     private LocalDate updateDate;
 

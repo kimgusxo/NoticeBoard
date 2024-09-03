@@ -21,7 +21,7 @@ public class SecurityConfig {
 
         http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges ->
-                        exchanges.pathMatchers("/board/showBoard", "/auth/**").permitAll()
+                        exchanges.pathMatchers("/", "/board/showBoard", "/auth/**").permitAll()
                                 .anyExchange().authenticated()
                 )
                 .formLogin(formLogin ->

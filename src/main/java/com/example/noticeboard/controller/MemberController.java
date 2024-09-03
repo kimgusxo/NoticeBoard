@@ -1,13 +1,16 @@
 package com.example.noticeboard.controller;
 
 import com.example.noticeboard.service.MemberService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+@Validated
 @Controller
 @RequestMapping("/member")
 public class MemberController {
@@ -32,7 +35,7 @@ public class MemberController {
     }
 
     @GetMapping("/get/{id}")
-    public Mono<String> getOneMember(@PathVariable String id, Model model) {
+    public Mono<String> getOneMember(@PathVariable @Valid String id, Model model) {
         model.addAttribute("member", memberService.getOneMember(id));
         return Mono.just("memberDetail");
     }

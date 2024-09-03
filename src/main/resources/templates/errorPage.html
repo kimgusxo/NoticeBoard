@@ -5,6 +5,10 @@
     <title>런타임 에러</title>
 </head>
 <body>
-    <h2 th:text="${error}">에러</h2>
+<h2 th:text="${error}">에러</h2>
+
+<!-- 뒤로가기 버튼 추가 -->
+<button th:onclick="|javascript:window.history.back();|">뒤로가기</button>
+
 </body>
 </html>

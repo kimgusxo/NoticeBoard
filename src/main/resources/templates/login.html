@@ -44,7 +44,7 @@
             border-color: #007bff;
             outline: none;
         }
-        .login-button {
+        .login-button, .signup-button {
             width: 100%;
             padding: 10px;
             background-color: black;
@@ -62,7 +62,7 @@
 <body>
 <div class="login-container">
     <h1>로그인</h1>
-    <form action="/auth/login" method="POST">
+    <form th:action="@{/auth/login}" method="POST">
         <div class="form-group">
             <label for="id">아이디</label>
             <input type="text" id="id" name="id" required>
@@ -72,7 +72,11 @@
             <input type="password" id="password" name="password" required>
         </div>
         <button type="submit" class="login-button">로그인</button>
-    </form>
+        </form>
+        <hr>
+        <form th:action="@{/auth/showSignUp}" method="GET">
+            <button type="submit" class="signup-button">회원가입</button>
+        </form>
 </div>
 </body>
 </html>

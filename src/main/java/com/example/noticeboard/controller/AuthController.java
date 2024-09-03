@@ -3,6 +3,7 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Member;
 import com.example.noticeboard.service.AuthService;
 import com.example.noticeboard.service.CustomUserDetailService;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebSession;
@@ -19,6 +21,7 @@ import reactor.core.publisher.Mono;
 import java.net.URI;
 
 @Slf4j
+@Validated
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
@@ -43,7 +46,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Mono<Void> login(@ModelAttribute Member member, ServerWebExchange exchange) {
+    public Mono<Void> login(@ModelAttribute @Valid Member member, ServerWebExchange exchange) {
         return customUserDetailService.findByUsername(member.getId())
                 .flatMap(userDetails -> {
                     if(!member.getPassword().equals(userDetails.getPassword())) {
@@ -70,7 +73,7 @@ public class AuthController {
 
 
     @PostMapping("/signUp")
-    public Mono<String> signUp(@ModelAttribute Member member) {
+    public Mono<String> signUp(@ModelAttribute @Valid Member member) {
         return authService.signUp(member).then(Mono.just("redirect:/board/showBoard"));
     }
 
