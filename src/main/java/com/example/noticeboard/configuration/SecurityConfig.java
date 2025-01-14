@@ -2,7 +2,6 @@ package com.example.noticeboard.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -22,7 +21,7 @@ public class SecurityConfig {
 
         http.csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(exchanges ->
-                        exchanges.pathMatchers("/board/showBoard", "/auth/**").permitAll()
+                        exchanges.pathMatchers("/", "/board/showBoard", "/auth/**").permitAll()
                                 .anyExchange().authenticated()
                 )
                 .formLogin(formLogin ->
@@ -36,4 +35,5 @@ public class SecurityConfig {
 
         return http.build();
     }
+
 }

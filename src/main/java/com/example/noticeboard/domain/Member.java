@@ -20,7 +20,5 @@ public class Member {
     @Transient
     private List<Board> boardList;
 
-    public void addBoard(Board board) {
-        this.boardList.add(board);
-    }
+
 }

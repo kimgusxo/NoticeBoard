@@ -2,11 +2,13 @@ package com.example.noticeboard.controller;
 
 import com.example.noticeboard.domain.Board;
 import com.example.noticeboard.service.BoardService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
@@ -48,16 +50,16 @@ public class BoardController {
     }
 
     @PostMapping("/post/save")
-    public Mono<String> createBoard(@ModelAttribute Board board, Model model) {
+    public Mono<String> createBoard(@ModelAttribute @Validated Board board, Model model) {
         model.addAttribute("board", boardService.createBoard(board));
         return Mono.just("boardDetail");
     }
 
     @GetMapping("/get/{boardId}")
-    public Mono<String> getOneByBoardId(@PathVariable Long boardId, Model model, ServerWebExchange exchange) {
+    public Mono<String> getOneByBoardId(@PathVariable @Validated Long boardId, Model model, ServerWebExchange exchange) {
         return exchange.getSession()
                 .flatMap(webSession -> {
-                    String writer = (String) webSession.getAttribute("ID");
+                    String writer = webSession.getAttribute("ID");
                     model.addAttribute("writer", writer);
                     return boardService.getOneByBoardId(boardId)
                             .doOnNext(board -> model.addAttribute("board", board))
