@@ -1,12 +1,13 @@
+-- member 테이블 생성
 CREATE TABLE IF NOT EXISTS member (
-    member_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    member_id BIGSERIAL PRIMARY KEY,
     id VARCHAR(255),
     password VARCHAR(255)
     );
 
--- Board 테이블 생성
+-- board 테이블 생성
 CREATE TABLE IF NOT EXISTS board (
-    board_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    board_id BIGSERIAL PRIMARY KEY,
     writer VARCHAR(255),
     title VARCHAR(255),
     content TEXT,
@@ -16,17 +17,17 @@ CREATE TABLE IF NOT EXISTS board (
     FOREIGN KEY (member_id) REFERENCES member(member_id)
     );
 
--- Photo 테이블 생성
+-- photo 테이블 생성
 CREATE TABLE IF NOT EXISTS photo (
-    photo_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    photo_id BIGSERIAL PRIMARY KEY,
     url VARCHAR(255),
     board_id BIGINT,
     FOREIGN KEY (board_id) REFERENCES board(board_id)
     );
 
--- Reply 테이블 생성
+-- reply 테이블 생성
 CREATE TABLE IF NOT EXISTS reply (
-    reply_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    reply_id BIGSERIAL PRIMARY KEY,
     writer VARCHAR(255),
     content TEXT,
     registration_date DATE,

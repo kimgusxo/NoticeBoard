@@ -3,7 +3,6 @@ package com.example.noticeboard.controller;
 import com.example.noticeboard.domain.Member;
 import com.example.noticeboard.service.AuthService;
 import com.example.noticeboard.service.CustomUserDetailService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,11 +27,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final CustomUserDetailService customUserDetailService;
+    private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(AuthService authService, CustomUserDetailService customUserDetailService) {
+    public AuthController(AuthService authService,
+                          CustomUserDetailService customUserDetailService,
+                          PasswordEncoder passwordEncoder) {
         this.authService = authService;
         this.customUserDetailService = customUserDetailService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/showLogin")
@@ -48,7 +52,7 @@ public class AuthController {
     public Mono<Void> login(@ModelAttribute @Validated Member member, ServerWebExchange exchange) {
         return customUserDetailService.findByUsername(member.getId())
                 .flatMap(userDetails -> {
-                    if(!member.getPassword().equals(userDetails.getPassword())) {
+                    if (!passwordEncoder.matches(member.getPassword(), userDetails.getPassword())) {
                         return Mono.error(new RuntimeException("비밀번호가 잘못되었습니다."));
                     } else {
                         Authentication authentication = new UsernamePasswordAuthenticationToken(
@@ -65,8 +69,7 @@ public class AuthController {
                                     exchange.getResponse().setStatusCode(HttpStatus.FOUND);
                                     exchange.getResponse().getHeaders().setLocation(URI.create("/board/showBoard"));
                                     return exchange.getResponse().setComplete();
-                                })
-                                .onErrorResume(e -> Mono.error(e)));
+                                }));
                     }
                 });
     }
