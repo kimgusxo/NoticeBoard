@@ -4,6 +4,7 @@ import com.example.noticeboard.domain.Board;
 import com.example.noticeboard.service.BoardService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -25,19 +26,25 @@ public class BoardController {
     }
 
     @GetMapping("/showBoard")
-    public Mono<String> showBoard(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !(authentication.getPrincipal() instanceof String)) {
-            model.addAttribute("loggedIn", true);
-        } else {
-            model.addAttribute("loggedIn", false);
-        }
-
-        return boardService.getAllBoard()
-                .collectList()
-                .doOnNext(boards -> model.addAttribute("boards", boards))
-                .thenReturn("boardPage");
+    public Mono<String> showBoard(Model model, ServerWebExchange exchange) {
+        return exchange.getPrincipal()
+                .flatMap(principal -> {
+                    model.addAttribute("loggedIn", true);
+                    return boardService.getAllBoard()
+                            .collectList()
+                            .doOnNext(boards -> model.addAttribute("boards", boards))
+                            .thenReturn("boardPage");
+                })
+                .switchIfEmpty(Mono.defer(() -> {
+                    model.addAttribute("loggedIn", false);
+                    return boardService.getAllBoard()
+                            .collectList()
+                            .doOnNext(boards -> model.addAttribute("boards", boards))
+                            .thenReturn("boardPage");
+                }));
     }
+
+
 
     @GetMapping("/showCreateBoard")
     public Mono<String> showCreateBoard(Model model, ServerWebExchange exchange) {
